@@ -1,5 +1,3 @@
-# Setup Jenkins SSL with default plugins and Login Credentials using Docker
---
 
 #### Create t2.small, Ubuntu 22.04 AWS EC2 Instance
 #### Allow 80, 443 in Security Groups Inbound Traffic Rules
@@ -31,7 +29,7 @@ chmod 755 ec2software.sh
 #### Goto https://jenkins.piebill.com:8443/script paste below script in box and click "Run"
 ```
 Jenkins.instance.pluginManager.plugins.each{
-  plugin ->
+  plugin -> 
     println ("${plugin.getDisplayName()} (${plugin.getShortName()}): ${plugin.getVersion()}")
 }
 ```
@@ -68,41 +66,6 @@ wget -qO- http://instance-data/latest/meta-data/public-ipv4; echo
 #### Open browser at URL: https://ip-address:443
 
 
-
-**Refernce Images below:**
----
-
-#### 1. Accepting HTTPS Un-Verified Secure Tokens
-![Jenkins SSL Accept Web Login Page](imgs/jenkinsloginssl1.jpg "Jenkins SSL Accept Web Login URL")
-
-
-
-#### 2. HTTPS/SSL Secure Login with Credentials as per Dockerfile  JENKINS_USER=admin and  JENKINS_PASS=Admin@123
-![Jenkins SSL Web Login Page](imgs/jenkinsloginssl2.jpg "Jenkins SSL Web Login URL")
-
-
-#### 3. Jenkins Client Download page
-![Jenkins CLI Plugins Download](imgs/jenkinscli.jpg "Jenkins CLI Plugins Download")
-
-
-#### 4. Jenkins Script Execution Page for listing Jenkins install Plugins
-![Jenkins CLI Plugins](imgs/jenkinscript1.jpg "Jenkins CLI Plugins")
-
-
-#### 5. Jenkins Plugins List Page 2
-![Jenkins CLI Plugins](imgs/jenkinscript2.jpg "Jenkins CLI Plugins")
-
-
-#### 6. Jenkins Plugins List Page 3
-![Jenkins CLI Plugins](imgs/jenkinscript3.jpg "Jenkins CLI Plugins")
-
-
-#### 7. Jenkins Plugins List Page 4
-![Jenkins CLI Plugins](imgs/jenkinscript4.jpg "Jenkins CLI Plugins")
-
-
----
-
 #### Notes: Use below command to clean up all Docker images, contiainers, networks and system files
 ```
 docker ps -a ; docker stop $(docker ps -qa) ; docker images ls -a ; docker container ls -la ; docker volume ls ; docker container ls -la | awk '{print $1}' | grep -v "CONTAINER" | xargs docker container rm  ; docker images -a | awk '{print $3}' | grep -v "IMAGE" | xargs docker image remove ; docker container ls -la ; docker images -a ; docker volume rm $(docker volume ls -q) ;  docker image prune -af ; docker container prune -af ; docker volume prune -af ; docker system prune -af ; docker ps -a ; docker images ls -a ; docker container ls -la ; docker volume ls
@@ -111,7 +74,7 @@ docker ps -a ; docker stop $(docker ps -qa) ; docker images ls -a ; docker conta
 
 #### .netrc for git pushing
 ```
-$ cat ~/.netrc
+$ cat ~/.netrc 
 machine github.com
         login wrkbase
         password GHPkgBDssFYHaILmDgcUj6saq8zvYKF2LpHc4
@@ -127,45 +90,3 @@ git clone https://github.com/wrkbase/jenkinsplugins-dckr-ssl.git
 git add . && git commit -m "Updating latest docs and code" && git push origin
 ```
 
-
-#### To view git modifications status
-```
-git status
-```
-
-#### To view git pushed status to origin
-```
-git log --name-status
-```
-
-#### To revert to previous commit state
-```
-git reset --hard HEAD~1
-git log --name-status
-git push -f -u origin
-OR
-git push -f -u origin main
-```
-
-**Setting up bash script for alias commands** 
-
-ubuntu:~$ cat shcut.sh
-
-```
-alias cls='clear'
-alias scn='screen'
-alias gitusr='git config --global user.name "Srikanth Pen"'
-alias giteml='git config --global user.email "wrkbase@gmail.com"'
-alias gitlst='git config --list --global'
-alias gtcl='git clone https://bitbucket.org/wrkbase/dockertraefikselfsign.git --branch master'
-alias frgrp='for i in `find src -name "*.js"`; do echo $i ===========================; grep "createUser" $i; done'
-alias frdif='for i in `find . -name "*.ORG"`; do echo $i =====================================; fl=`echo $i | sed 's/.ORG$//'`; diff --color $i $fl; done'
-alias diffc='diff --color'
-alias gits='git status'
-alias gitns='git log --name-status'
-alias gitdc='git log --graph --all --decorate --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset" --date=short'
-alias gitcomm='git status; git checkout -b master; git add . ; git commit -m "Traefik HTTPS Trusted Web Secure Certificates in Docker"; git push -u origin master; git status;'
-alias gitfrc='git push -f -u origin master'
-```
-
----
